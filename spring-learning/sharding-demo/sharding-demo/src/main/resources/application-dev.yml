@@ -1,0 +1,62 @@
+spring:
+  datasource:
+    # 主库
+    master:
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/master?useSSL=false
+      username: root
+      password: root123456
+    # 从库1
+    slave1:
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/slave1?useSSL=false
+      username: root
+      password: root123456
+    # 从库2
+    slave2:
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/slave2?useSSL=false
+      username: root
+      password: root123456
+
+sharding:
+  jdbc:
+    # 数据源规则配置
+    data-sources:
+      # 主库
+      master:
+        jdbc-url: jdbc:mysql://localhost:3306/master?useSSL=false
+        username: root
+        password: root123456
+        driver-class-name: com.mysql.jdbc.Driver
+      # 从库1
+      slave1:
+        jdbc-url: jdbc:mysql://localhost:3306/slave1?useSSL=false
+        username: root
+        password: root123456
+        driver-class-name: com.mysql.jdbc.Driver
+      # 从库2
+      slave2:
+        jdbc-url: jdbc:mysql://localhost:3306/slave2?useSSL=false
+        username: root
+        password: root123456
+        driver-class-name: com.mysql.jdbc.Driver
+    # 数据库分片规则配置
+    sharding:
+      tables:
+        user:
+          # 分片策略，按照user_id取模分片
+          actualDataNodes: master.user_${0..2}
+          tableStrategy:
+            inline:
+              shardingColumn: user_id
+              algorithmExpression: user_${user_id % 3}
+          # 读写分离配置
+          # 主库
+          masterDataSourceName: master
+          # 从库
+          slaveDataSourceNames:
+            - slave1
+            - slave2
+    # 默认的分片策略
+    defaultDataSourceName: master

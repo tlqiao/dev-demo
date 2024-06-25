@@ -1,0 +1,9 @@
+server:
+  port: 8862
+spring:
+  application:
+    name: sentinel-demo
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8090

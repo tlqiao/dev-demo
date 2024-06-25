@@ -1,0 +1,114 @@
+{
+  "name": "my-react-app",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "demo",
+          "title": "demo",
+          "icon": "./public/static/bot.png"
+        }
+      ]
+    },
+    "views": {
+      "demo": [
+        {
+          "type": "webview",
+          "id": "demoSidebar",
+          "name": "DemoSidebar"
+        }
+      ],
+      "explorer": [
+        {
+          "id": "sample",
+          "name": "Sample"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "demo.showOne",
+        "title": "showOne"
+      },
+      {
+        "command": "demo.showTwo",
+        "title": "showTwo"
+      },
+      {
+        "command": "extension.runJestTests",
+        "title": "Run Jest Test"
+      },
+      {
+        "command": "sampleExplorer.refresh",
+        "title": "Refresh Sample Explorer"
+      },
+      {
+        "command": "markdownTestController.runTests",
+        "title": "Run Markdown Tests"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "demo.submenu",
+        "label": "Demo"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "demo.submenu",
+          "group": "demo"
+        }
+      ],
+      "demo.submenu": [
+        {
+          "command": "demo.showOne"
+        },
+        {
+          "command": "demo.showTwo"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "start": "webpack serve --mode development --open",
+    "build": "webpack --mode production",
+    "vscode:prepublish": "npm run build",
+    "compile": "tsc -p ./"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "html-webpack-plugin": "^5.6.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.5",
+    "webpack": "^5.92.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4",
+    "@types/vscode": "^1.90.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "vscode": "^1.1.37",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.12",
+    "@types/mocha": "^10.0.6"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  }
+}

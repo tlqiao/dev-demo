@@ -1,0 +1,13 @@
+syntax="proto2";
+option java_multiple_files=true;
+package com.example.grpc.gencode;
+
+message HelloRequest {
+required  string firstName = 1;
+required  string lastName = 2 ;
+}
+message HelloResponse {
+required string greeting =1;}
+
+service HelloService {
+rpc hello(HelloRequest) returns (HelloResponse);}

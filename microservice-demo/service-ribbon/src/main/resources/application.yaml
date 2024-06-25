@@ -1,0 +1,15 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8764
+spring:
+  application:
+    name: service-ribbon
+ribbon:
+  ConnectTimeout: 5000
+  ReadTimeout: 5000
+feign:
+  hystrix:
+    enabled: true
