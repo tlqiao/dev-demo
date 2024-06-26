@@ -4,3 +4,4 @@
 **/build/
 **/.mvn/
 **/dist/
+**/my_pytest.egg-info
