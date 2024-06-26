@@ -5,3 +5,4 @@
 **/.mvn/
 **/dist/
 **/my_pytest.egg-info
+**/_pycache_
