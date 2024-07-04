@@ -1,5 +1,7 @@
 ### dev-demo Info
 
+#### If you think these demo codes are useful, please give the project a star.Thank you!
+
 - **custom-jest-runtime:** build a tool similar to jest, more details see [here](https://blog.csdn.net/qiaotl/article/details/139985555)
 - **custom-pytest:** build a tool similar to pytest, more details see [here](https://blog.csdn.net/qiaotl/article/details/139990767)
 - **microservice-demo:** learning microservice demo code
@@ -9,3 +11,4 @@
 - **trace-demo:** learn how to use zipkin to trace app.
 - **ui-recorder:** build a record ui test tool. more details see [here](https://blog.csdn.net/qiaotl/article/details/139866118)
 - **vscode-extension-demo:** build some vscode extension demo.
+- **customer-appium-inspector:** build a tool similar to appium inspector,more details see [here](https://blog.csdn.net/qiaotl/article/details/140100322)
