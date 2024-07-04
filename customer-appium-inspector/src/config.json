@@ -1,0 +1,9 @@
+{
+  "platformName": "Android",
+  "automationName": "UiAutomator2",
+  "app": "/Users/taoli/Downloads/project/test-examples/appium-test/apps/Android-NativeDemoApp-0.4.0.apk",
+  "deviceName": "Pixel_3_10.0",
+  "platformVersion": "11.0",
+  "appPackage": "com.wdiodemoapp",
+  "appActivity": "com.wdiodemoapp.MainActivity"
+}
