@@ -1,6 +1,6 @@
 # Build a like appium inspector tool
 
-more details see [here]()
+more details see [here](https://blog.csdn.net/qiaotl/article/details/140100322)
 
 #  How to start server
 
