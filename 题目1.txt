@@ -1,0 +1,429 @@
+
+你是python专家，分析这个题目，用python实现，并详细解释为什么要这样实现？
+你是python专家，分析这个题目，用python实现，不用写代码，给出解决思路，即可。
+题目：
+给定 m 个数组，每个数组都已经按照升序排好序了。现在你需要从两个不同的数组中选择两个整数（每个数组选一个）并且计算它们的距离。两个整数 a 和 b 之间的距离定义为它们差的绝对值 |a-b| 。你的任务就是去找到最大距离
+
+class Solution:
+    def maxDistance(self, arrays: List[List[int]]) -> int:
+        if not arrays:
+            return 0
+
+        # 初始化最小值和最大值
+        min_from_left = [array[0] for array in arrays]
+        max_from_right = [array[-1] for array in arrays]
+        # 初始化最大距离
+        max_dist = 0
+        # 计算从左侧数组的最小元素到右侧数组的最大元素的最大距离
+        for i in range(len(arrays)):
+            for j in range(len(arrays)):
+                if i != j:
+                    max_dist = max(max_dist, abs(min_from_left[i] - max_from_right[j]))
+        # 计算从右侧数组的最小元素到左侧数组的最大元素的最大距离
+        for i in range(len(arrays)):
+            for j in range(len(arrays)):
+                if i != j:
+                    max_dist = max(max_dist, abs(max_from_right[i] - min_from_left[j]))
+        return max_dist
+
+波峰波谷排序
+给你一个的整数数组 nums, 将该数组重新排序后使 nums[0] <= nums[1] >= nums[2] <= nums[3]... 
+class Solution:
+    def wiggleSort(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        for i in range(1, len(nums)):
+            if (i % 2 == 1 and nums[i] < nums[i - 1]) or (
+                i % 2 == 0 and nums[i] > nums[i - 1]
+            ):
+                nums[i], nums[i - 1] = nums[i - 1], nums[i]
+
+易混淆数
+给定一个数字 N，当它满足以下条件的时候返回 true：
+
+原数字旋转 180° 以后可以得到新的数字。
+
+如 0, 1, 6, 8, 9 旋转 180° 以后，得到了新的数字 0, 1, 9, 8, 6 。
+
+2, 3, 4, 5, 7 旋转 180° 后，得到的不是数字。
+
+易混淆数 (confusing number) 在旋转180°以后，可以得到和原来不同的数，且新数字的每一位都是有效的。
+class Solution:
+    def confusingNumber(self, n: int) -> bool:
+        rotate_map = {"0": "0", "1": "1", "6": "9", "8": "8", "9": "9"}
+        nstring = str(n)
+        rotated = ""
+        for char in nstring:
+            if char not in rotate_map:
+                return false
+            rotated = rotate_map[char] + rotated
+        return nstring != rotated
+
+字符串左右移
+给定一个包含小写英文字母的字符串 s 以及一个矩阵 shift，其中 shift[i] = [direction, amount]：
+direction 可以为 0 （表示左移）或 1 （表示右移）。
+amount 表示 s 左右移的位数。
+左移 1 位表示移除 s 的第一个字符，并将该字符插入到 s 的结尾。
+类似地，右移 1 位表示移除 s 的最后一个字符，并将该字符插入到 s 的开头。
+class Solution:
+    def stringShift(self, s: str, shift: List[List[int]]) -> str:
+        for direction, amount in shift:
+            if direction == 0:
+                s = s[amount:] + s[:amount]
+            elif direction == 1:
+                s = s[-amount:] + s[:-amount]
+        return s 
+
+回文串：
+偶数长度的字符串中，每个字符出现的次数都必须是偶数。
+奇数长度的字符串中，最多只能有一个字符出现奇数次，其余字符出现的次数都必须是偶数。
+给你一个字符串 s ，如果该字符串的某个排列是 
+回文串
+ ，则返回 true ；否则，返回 false 。
+ class Solution:
+    def canPermutePalindrome(self, s: str) -> bool:
+        char_count={}
+        for char in s:
+            if char not in char_count:
+                char_count[char]=1
+            else:
+                char_count[char]=char_count[char]+1
+        odd_count=0        
+        for num in char_count.values():
+            if num % 2 !=0:
+                odd_count=odd_count+1
+        if odd_count<2:
+            return True
+        else:
+            return False   
+
+判断句子相似性：
+我们可以将一个句子表示为一个单词数组，例如，句子 "I am happy with leetcode" 可以表示为 arr = ["I","am",happy","with","leetcode"]
+
+给定两个句子 sentence1 和 sentence2 分别表示为一个字符串数组，并给定一个字符串对 similarPairs ，其中 similarPairs[i] = [xi, yi] 表示两个单词 xi and yi 是相似的。
+
+如果 sentence1 和 sentence2 相似则返回 true ，如果不相似则返回 false 。
+
+两个句子是相似的，如果:
+
+它们具有 相同的长度 (即相同的字数)
+sentence1[i] 和 sentence2[i] 是相似的
+请注意，一个词总是与它自己相似，也请注意，相似关系是不可传递的。例如，如果单词 a 和 b 是相似的，单词 b 和 c 也是相似的，那么 a 和 c  不一定相似 。
+解决思路：
+检查长度：
+首先检查两个句子的长度是否相同。如果长度不同，直接返回 False，因为句子长度不同的情况下，它们不能相似。
+建立相似词对的查找结构：
+
+使用 similarPairs 来构建一个字典或集合，用于快速查找两个单词是否相似。记住，每个单词与它自己相似。
+遍历并检查每对单词：
+
+对于每对对应的单词（即 sentence1[i] 和 sentence2[i]），检查它们是否相似。
+如果任何一对单词不相似，则返回 False。
+相似性判断：
+
+两个单词 xi 和 yi 相似的条件是：
+它们相等 (xi == yi)。
+或者 xi 和 yi 在 similarPairs 中有定义。
+class Solution:
+    def areSentencesSimilar(
+        self, sentence1: List[str], sentence2: List[str], similarPairs: List[List[str]]
+    ) -> bool:
+        if len(sentence1) != len(sentence2):
+            return False
+        pairs = {}
+        revert_pairs = {}
+        for pair in similarPairs:
+            pairs[pair[0]] = pair[1]
+            revert_pairs[pair[1]] = pair[0]
+        new_sentence = zip(sentence1, sentence2)
+        for world1, world2 in new_sentence:
+            if world1 == world2:
+                continue
+            if world1 in pairs and pairs[world1] == world2:
+                continue
+            if world1 in revert_pairs and revert_pairs[world1] == world2:
+                continue
+            return False
+        return True
+
+单行键盘：
+我们定制了一款特殊的键盘，所有的键都 排列在一行上 。
+给定一个长度为 26 的字符串 keyboard ，来表示键盘的布局(索引从 0 到 25 )。一开始，你的手指在索引 0 处。要输入一个字符，你必须把你的手指移动到所需字符的索引处。手指从索引 i 移动到索引 j 所需要的时间是 |i - j|。
+您需要输入一个字符串 word 。写一个函数来计算用一个手指输入需要多少时间。
+
+class Solution:
+    def calculateTime(self, keyboard: str, word: str) -> int:
+        key_map={}
+        for index,value in enumerate(keyboard):
+            key_map[value]=index
+        current_position=0
+        total_postion=0
+        for char in word:
+            if char in key_map:
+                distance = abs(current_position - key_map[char])
+            total_postion=total_postion+distance
+            current_position=key_map[char]
+        return total_postion  
+
+最大唯一数
+给你一个整数数组 A，请找出并返回在该数组中仅出现一次的最大整数。
+如果不存在这个只出现一次的整数，则返回 -1。
+class Solution:
+    def largestUniqueNumber(self, nums: List[int]) -> int:
+        map = {}
+        for i in nums:
+            if i in map:
+                map[i] = map[i] + 1
+            else:
+                map[i] = 1
+        max_value = 0
+        for key, value in map.items():
+            if value == 1:
+                if key > max_value:
+                    max_value = key
+        if max_value == 0:
+            return -1
+        else:
+            return max_value   
+
+数元素
+给你一个整数数组 arr， 对于元素 x ，只有当 x + 1 也在数组 arr 里时，才能记为 1 个数。
+如果数组 arr 里有重复的数，每个重复的数单独计算。
+class Solution:
+    def countElements(self, arr: List[int]) -> int:
+        total_num=0
+        new_list=[]
+        for num in arr:
+            new_list.append(num+1)
+
+        for value in new_list:
+            if value  in arr:
+                total_num = total_num + 1
+        return total_num    
+
+有效的单词方块
+给你一个字符串数组 words，如果它能形成一个有效的 单词方块 ，则返回 true 。
+有效的单词方块是指此由字符串数组组成的文字方块的 第 k 行 和 第 k 列所显示的字符串完全相同，其中 0 <= k < max(numRows, numColumns) 。
+
+class Solution:
+    def validWordSquare(self, words: List[str]) -> bool:
+        row_len = len(words)
+        # 检查每一行和每一列是否相同
+        for i in range(row_len):
+            for j in range(len(words[i])):
+                # 检查是否越界
+                if words[i][j] != words[j][i]:
+                    return False
+        return True
+
+缺失区间
+给你一个闭区间 [lower, upper] 和一个 按从小到大排序 的整数数组 nums ，其中元素的范围在闭区间 [lower, upper] 当中。
+如果一个数字 x 在 [lower, upper] 区间内，并且 x 不在 nums 中，则认为 x 缺失。
+返回 准确涵盖所有缺失数字 的 最小排序 区间列表。也就是说，nums 的任何元素都不在任何区间内，并且每个缺失的数字都在其中一个区间内。
+class Solution:
+    def findMissingRanges(self, nums: List[int], lower: int, upper: int) -> List[List[int]]:
+        ranges = []
+        # Helper function to add a range to the list
+        def add_range(start: int, end: int):
+                ranges.append([start, end])
+        
+        # Check the range from lower to the first element in nums
+        if not nums:
+            add_range(lower, upper)
+            return ranges
+        
+        if lower < nums[0]:
+            add_range(lower, nums[0] - 1)
+        
+        # Check ranges between elements in nums
+        for i in range(len(nums) - 1):
+            if nums[i] + 1 < nums[i + 1]:
+                add_range(nums[i] + 1, nums[i + 1] - 1)
+        
+        # Check the range from the last element in nums to upper
+        if nums[-1] < upper:
+            add_range(nums[-1] + 1, upper)
+        
+        return ranges
+
+会议室问题
+给定一个会议时间安排的数组 intervals ，每个会议时间都会包括开始和结束的时间 intervals[i] = [starti, endi] ，请你判断一个人是否能够参加这里面的全部会议。
+class Solution:
+    def canAttendMeetings(self, intervals: List[List[int]]) -> bool:
+        if not intervals:
+            return True
+
+        def get_start_time(x: List[int]) -> int:
+            return x[0]
+
+        intervals.sort(key=get_start_time)
+        for i in range(len(intervals) - 2):
+            current = intervals[i]
+            next = intervals[i + 1]
+            if current[1] > next[0]:
+                return False
+        return True        
+
+数据流中移动平均值
+给定一个整数数据流和一个窗口大小，根据该滑动窗口的大小，计算其所有整数的移动平均值。
+思路：设定一个窗口，窗口是一个list，不断往list中追加值，当list满的时候，pop出最前面的值，继续追加新的值。avg=sum(list)/len(list)
+实现 MovingAverage 类：
+MovingAverage(int size) 用窗口大小 size 初始化对象。
+double next(int val) 计算并返回数据流中最后 size 个值的移动平均值。
+class MovingAverage:
+
+    def __init__(self, size: int):
+        self.size=size
+        self.window=[]
+
+
+    def next(self, val: int) -> float:
+        if len(self.window) == self.size:
+            self.window.pop(0)
+        self.window.append(val)
+        return sum(self.window)/(len(self.window)) 
+
+
+链表这个后面还要复习一下：
+给定链表 head 和两个整数 m 和 n. 遍历该链表并按照如下方式删除节点:
+开始时以头节点作为当前节点.
+保留以当前节点开始的前 m 个节点.
+删除接下来的 n 个节点.
+重复步骤 2 和 3, 直到到达链表结尾.
+在删除了指定结点之后, 返回修改过后的链表的头节点. 
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def deleteNodes(self, head: ListNode, m: int, n: int) -> ListNode:
+        current = head
+        while current:
+            # 保留m个节点
+            for _ in range(1, m):
+                if current is None:
+                    return head
+                current = current.next
+            if current is None:
+                break
+
+            # 删除n个节点
+            to_delete = current.next
+            for _ in range(n):
+                if to_delete is None:
+                    break
+                to_delete = to_delete.next
+            # 调整指针
+            current.next = to_delete
+            current = to_delete
+        return head   
+
+
+给你一个不同学生的分数列表 items，其中 items[i] = [IDi, scorei] 表示 IDi 的学生的一科分数，你需要计算每个学生 最高的五科 成绩的 平均分。
+返回答案 result 以数对数组形式给出，其中 result[j] = [IDj, topFiveAveragej] 表示 IDj 的学生和他 最高的五科 成绩的 平均分。result 需要按 IDj  递增的 顺序排列 。
+学生 最高的五科 成绩的 平均分 的计算方法是将最高的五科分数相加，然后用 整数除法 除以 5 。
+class Solution:
+    def highFive(self, items: List[List[int]]) -> List[List[int]]:
+        middle_result = {}
+        result = []
+        for item in items:
+            student_id, score = item
+            if student_id not in middle_result:
+                middle_result[student_id] = []
+            middle_result[student_id].append(score)
+        for student_id, scores in middle_result.items():
+            sorted_sores = sorted(scores, reverse=True)[:5]
+            avg_score = sum(sorted_sores) // 5
+            result.append([student_id, avg_score])
+        # result.sort(key=lambda x: x[0])
+        result = sorted(result)
+        return result
+
+等差数列中缺失的数字
+在某个数组 arr 中，值符合等差数列的数值规律：在 0 <= i < arr.length - 1 的前提下，arr[i+1] - arr[i] 的值都相等。
+我们会从该数组中删除一个 既不是第一个 也 不是最后一个的值，得到一个新的数组  arr。
+给你这个缺值的数组 arr，返回 被删除的那个数 。
+class Solution:
+    def missingNumber(self, arr: List[int]) -> int:
+        diffs = [arr[i + 1] - arr[i] for i in range(len(arr) - 1)]
+
+        # 找到正确的公差
+        if diffs[0] > 0:
+            correct_diff = min(diffs)
+        else:
+            correct_diff = max(diffs)
+
+        # 找到缺失的元素
+        for i in range(len(arr) - 1):
+            if arr[i + 1] - arr[i] != correct_diff:
+                return arr[i] + correct_diff
+
+滑动窗口类的问题
+我们可以使用滑动窗口技术来解决这个问题。滑动窗口是一种在数组/字符串问题中常用的技术，特别是需要找到满足某些条件的最长子数组/子串时。
+给你一个字符串 s ，请你找出 至多 包含 两个不同字符 的最长子串，并返回该子串的长度。
+示例 1：
+输入：s = "eceba"
+输出：3
+解释：满足题目要求的子串是 "ece" ，长度为 3 。
+示例 2：
+输入：s = "ccaabbb"
+输出：5
+解释：满足题目要求的子串是 "aabbb" ，长度为 5 。
+定义双指针：一个指针表示窗口的起始位置，另一个指针表示窗口的结束位置。 指针实际就是list中的index
+使用哈希表记录字符及其频率：在窗口滑动过程中，我们需要一个哈希表来记录当前窗口内字符的出现频率。
+调整窗口大小：当窗口内的字符种类超过两个时，我们需要调整窗口的起始位置，直到窗口内的字符种类不超过两个。这里的窗口大小，就是包含left，right坐标的list长度
+记录最大长度：在滑动过程中，记录满足条件的最长子串的长度。
+这里的指针在python中实际就是list的坐标
+
+class Solution:
+    def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
+        char_count = {}
+        max_size = 0
+        left = 0
+        if not s:
+            return 0
+        for right in range(len(s)):
+            char = s[right]
+            if char not in char_count:
+                char_count[char] = 1
+            else:
+                char_count[char] = char_count[char] + 1
+            while len(char_count) > 2:
+                leftChar = s[left]
+                char_count[leftChar] = char_count[leftChar] - 1
+                if (char_count[leftChar]) == 0:
+                    char_count.pop(leftChar)
+                left = left + 1
+            max_size = max(max_size, right - left + 1)
+        return max_size
+
+实现二分查找的包，bisect
+bisect_left(nums, target)：
+找到 target 在 nums 中的第一个位置（即最左边的位置）。
+如果 target 不存在，它返回应该插入 target 的位置，保持顺序不变。
+bisect_right(nums, target)：
+
+找到 target 在 nums 中最后一个位置的下一个位置。
+如果 target 存在，它返回的是 target 在 nums 中最后一个 target 后面的位置。
+
+迭代压缩这个题目没有做，后面再做，有点复杂，是设计相关的
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
